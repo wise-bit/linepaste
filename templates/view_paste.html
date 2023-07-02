@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>View Paste</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f7f7f7;
+            }
+
+            .container {
+                max-width: 400px;
+                margin: 0 auto;
+                padding: 40px;
+                background-color: #ffffff;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 5px;
+                margin-top: 50px;
+            }
+
+            .create-container {
+                max-width: 400px;
+                margin: 0 auto;
+                align-items: center;
+                align-content: center;
+                text-align: center;
+                margin-top: 30px;
+            }
+
+            .paste-content {
+                white-space: pre-wrap;
+                font-size: 16px;
+                line-height: 1.5;
+                background-color: #f7f7f7;
+                padding: 20px;
+                border: 1px solid #e0e0e0;
+                border-radius: 5px;
+                overflow-x: auto;
+            }
+
+            .button {
+                display: inline-block;
+                margin-top: 20px;
+                padding: 12px 30px;
+                font-size: 18px;
+                font-weight: bold;
+                color: #ffffff;
+                background-color: rgb(62, 91, 77);
+                border-radius: 4px;
+                text-decoration: none;
+                transition: background-color 0.3s ease;
+            }
+
+            .button:hover {
+                background-color: rgb(90, 131, 111);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>View Paste</h1>
+            <div class="paste-content">{{ paste.contents }}</div>
+            <div class="create-container">
+                <a href="/create" class="button">Create a New Paste</a>
+            </div>
+        </div>
+    </body>
+</html>
