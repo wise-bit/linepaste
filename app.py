@@ -14,7 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = f"mysql://sat:{os.getenv('DB_PASSWORD')}@localhost:3306/pastes"
+] = f"mysql://sat:{os.getenv('DB_PASSWORD')}@127.0.0.1:3306/pastes"
 db = SQLAlchemy(app)
 
 
@@ -81,4 +81,5 @@ def get_last_id():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=5000)  # ssl_context='adhoc'
+
