@@ -73,6 +73,30 @@
             input[type="submit"]:hover {
                 background-color: #555;
             }
+
+            .home-container {
+                text-align: right;
+                margin-bottom: 40px;
+            }
+
+            .home-button {
+                display: inline-block;
+                margin-top: 20px;
+                padding: 10px 24px;
+                font-size: 16px;
+                font-weight: bold;
+                color: #333;
+                background-color: white;
+                border: 2px solid black;
+                border-radius: 4px;
+                text-decoration: none;
+                transition: background-color 0.3s ease;
+            }
+
+            .home-button:hover {
+                color: white;
+                background-color: #333;
+            }
         </style>
     </head>
 
@@ -80,6 +104,9 @@
         <h1>Create a New Paste</h1>
 
         <form method="POST" action="/create">
+            <div class="home-container">
+                <a href="/" class="home-button">Home</a>
+            </div>
             <label for="title">Title:</label>
             <input
                 type="text"
