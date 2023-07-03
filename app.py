@@ -80,7 +80,7 @@ def create_paste():
         title = request.form.get("title")
         passwd = hash(request.form.get("passwd"))
 
-        lifetime = min(int(request.form.get("expiry")), 2880)
+        lifetime = min(int(request.form.get("expiry") or 60), 2880)
         created_at = datetime.today()
         expire_at = datetime.today() + timedelta(minutes=lifetime)
         unique_id = f"{datetime.now().strftime('%y%m%d')}{new_id}"
