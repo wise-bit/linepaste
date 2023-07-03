@@ -1,3 +1,4 @@
+from waitress import serve
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import text
@@ -81,5 +82,6 @@ def get_last_id():
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)  # ssl_context='adhoc'
+    # app.run(host='0.0.0.0', port=5000)  # ssl_context='adhoc'
+    serve(app, host="0.0.0.0", port=8080)
 
