@@ -19,10 +19,11 @@ app.config[
 ] = f"mysql://sat:{os.getenv('DB_PASSWORD')}@127.0.0.1:3306/pastes"
 db = SQLAlchemy(app)
 
-encrypt_salt = b'$2b$12$wBaDKOH6MeU8qZFd10JjT.'
+encrypt_salt = b"$2b$12$wBaDKOH6MeU8qZFd10JjT."
+
 
 def hash(original: str) -> str:
-    return bcrypt.hashpw(original.encode(), encrypt_salt) 
+    return bcrypt.hashpw(original.encode(), encrypt_salt)
 
 
 class Paste(db.Model):
@@ -38,7 +39,7 @@ class Paste(db.Model):
 def home():
     # user_agent = request.headers.get("User-Agent")
     # print(f"{user_agent}\n----------")
-    
+
     return render_template("title_page.html")
 
 
@@ -67,17 +68,19 @@ def create_paste():
         return render_template("create_paste.html")
 
 
-@app.route('/p/<paste_id>', methods=['GET', 'POST'])
+@app.route("/p/<paste_id>", methods=["GET", "POST"])
 def view_paste(paste_id):
     # Retrieve the paste from the database using the paste_id
     # Return the paste content and other details
-    paste_pass = Paste.query.with_entities(Paste.passwd).filter(Paste.uuid == paste_id).first()
+    paste_pass = (
+        Paste.query.with_entities(Paste.passwd).filter(Paste.uuid == paste_id).first()
+    )
 
     if paste_pass:
         if paste_pass[0]:
-            if request.method == 'POST':
-                entered_password = request.form.get('passwd')
-                
+            if request.method == "POST":
+                entered_password = request.form.get("passwd")
+
                 if hash(entered_password).decode() == paste_pass[0]:
                     # Correct password entered, retrieve the full paste data
                     paste = Paste.query.filter(Paste.uuid == paste_id).first()
@@ -85,10 +88,12 @@ def view_paste(paste_id):
 
                 # Incorrect password entered, show an error message
                 error_message = "Incorrect password, please try again!"
-                return render_template('password_input.html', paste_id=paste_id, error=error_message)
+                return render_template(
+                    "password_input.html", paste_id=paste_id, error=error_message
+                )
 
             # Display password input form for password-protected paste
-            return render_template('password_input.html')
+            return render_template("password_input.html")
 
         # No password set, display the paste content
         paste = Paste.query.filter(Paste.uuid == paste_id).first()
