@@ -23,7 +23,9 @@ encrypt_salt = b"$2b$12$wBaDKOH6MeU8qZFd10JjT."
 
 
 def hash(original: str) -> str:
-    return bcrypt.hashpw(original.encode(), encrypt_salt)
+    if original:
+        return bcrypt.hashpw(original.encode(), encrypt_salt)
+    return ""
 
 
 class Paste(db.Model):
@@ -62,7 +64,8 @@ def create_paste():
         db.session.add(user_pastes)
         db.session.commit()
 
-        return redirect(f"/p/{unique_id}")  # Redirect to the view page of the paste
+        return render_template("success_create.html", paste_id=unique_id)
+        # return redirect(f"/p/{unique_id}")  # Redirect to the view page of the paste
 
     else:
         return render_template("create_paste.html")

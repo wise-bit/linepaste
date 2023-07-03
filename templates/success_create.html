@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Paste Creation Success</title>
+        <style>
+            body {
+                background-color: #f2f2f2;
+                font-family: Arial, sans-serif;
+                text-align: center;
+                margin-top: 100px;
+            }
+
+            .container {
+                max-width: 400px;
+                margin: 0 auto;
+                padding: 40px;
+                padding-top: 50px;
+                background-color: #ffffff;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 5px;
+                margin-top: 100px;
+                text-align: center;
+            }
+
+            .success-message {
+                font-size: 24px;
+                color: green;
+                margin-bottom: 20px;
+            }
+
+            .redirect-button {
+                width: 200px;
+                padding: 10px 20px;
+                font-size: 16px;
+                background-color: #2a552c;
+                border: none;
+                color: #ffffff;
+                cursor: pointer;
+                border-radius: 4px;
+                transition: background-color 0.3s ease;
+                margin: 30px auto;
+            }
+
+            .redirect-button:hover {
+                background-color: #45a049;
+            }
+
+            a {
+                text-decoration: none;
+                color: white;
+            }
+
+            .paste-notes {
+                font-size: 18px;
+            }
+
+            .paste-link {
+                margin: 6px;
+                font-weight: 600;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="success-message">Paste created successfully!</div>
+
+            <div class="paste-notes">
+                <div>Retain this link for future access:</div>
+                <div class="paste-link">paste.satrajit.ca/p/{{ paste_id }}</div>
+            </div>
+            <!-- <button
+                class="redirect-button"
+                onclick="redirectToPaste(unique_id)"
+            >
+                Go to Paste
+            </button> -->
+            <div class="redirect-button">
+                <a href="{{ url_for('view_paste', paste_id=paste_id) }}"
+                    >Go to Paste</a
+                >
+            </div>
+        </div>
+    </body>
+</html>
