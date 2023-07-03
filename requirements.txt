@@ -4,6 +4,7 @@ python-dotenv==1.0.0
 SQLAlchemy==2.0.9
 waitress==2.1.2
 bcrypt==4.0.1
+apscheduler==3.10
 
 # sudo apt install python3-dev default-libmysqlclient-dev build-essential
 mysqlclient==2.1.1

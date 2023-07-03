@@ -56,6 +56,7 @@
 
             .paste-link {
                 margin: 6px;
+                margin-bottom: 20px;
                 font-weight: 600;
             }
         </style>
@@ -67,6 +68,7 @@
             <div class="paste-notes">
                 <div>Retain this link for future access:</div>
                 <div class="paste-link">paste.satrajit.ca/p/{{ paste_id }}</div>
+                <div>Link will expire in {{ lifetime }} minutes.</div>
             </div>
             <!-- <button
                 class="redirect-button"
@@ -74,11 +76,9 @@
             >
                 Go to Paste
             </button> -->
-            <div class="redirect-button">
-                <a href="{{ url_for('view_paste', paste_id=paste_id) }}"
-                    >Go to Paste</a
-                >
-            </div>
+            <a href="{{ url_for('view_paste', paste_id=paste_id) }}">
+                <div class="redirect-button">Go to Paste</div>
+            </a>
         </div>
     </body>
 </html>

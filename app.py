@@ -1,11 +1,13 @@
 from waitress import serve
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.sql import text
+from apscheduler.schedulers.background import BackgroundScheduler
+
 from dotenv import load_dotenv
-from datetime import datetime
+from datetime import datetime, timedelta
 import bcrypt
 import os
+import atexit
 
 
 app = Flask(__name__)
@@ -18,6 +20,26 @@ app.config[
     "SQLALCHEMY_DATABASE_URI"
 ] = f"mysql://sat:{os.getenv('DB_PASSWORD')}@127.0.0.1:3306/pastes"
 db = SQLAlchemy(app)
+
+
+# Schedule tasks
+def delete_expired_pastes():
+    with app.app_context():
+        current_time = datetime.now()
+        expired_pastes = Paste.query.filter(Paste.expire_at < current_time).all()
+
+        for paste in expired_pastes:
+            db.session.delete(paste)
+
+        db.session.commit()
+
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(delete_expired_pastes, "interval", seconds=30)
+scheduler.start()
+
+atexit.register(lambda: scheduler.shutdown())
+
 
 encrypt_salt = b"$2b$12$wBaDKOH6MeU8qZFd10JjT."
 
@@ -35,6 +57,8 @@ class Paste(db.Model):
     title = db.Column(db.String(100))
     contents = db.Column(db.Text)
     passwd = db.Column(db.String(30))
+    created_at = db.Column(db.DateTime, default=datetime.today())
+    expire_at = db.Column(db.DateTime, default=datetime.today() + timedelta(minutes=60))
 
 
 @app.route("/")
@@ -56,15 +80,27 @@ def create_paste():
         title = request.form.get("title")
         passwd = hash(request.form.get("passwd"))
 
+        lifetime = min(int(request.form.get("expiry")), 2880)
+        created_at = datetime.today()
+        expire_at = datetime.today() + timedelta(minutes=lifetime)
         unique_id = f"{datetime.now().strftime('%y%m%d')}{new_id}"
 
         user_pastes = Paste(
-            uuid=unique_id, contents=content, title=title, passwd=passwd
+            uuid=unique_id,
+            contents=content,
+            title=title,
+            passwd=passwd,
+            created_at=created_at,
+            expire_at=expire_at,
         )
         db.session.add(user_pastes)
         db.session.commit()
 
-        return render_template("success_create.html", paste_id=unique_id)
+        expire_at.day
+
+        return render_template(
+            "success_create.html", paste_id=unique_id, lifetime=lifetime
+        )
         # return redirect(f"/p/{unique_id}")  # Redirect to the view page of the paste
 
     else:

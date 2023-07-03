@@ -57,6 +57,26 @@
                 border-color: #333;
             }
 
+            input[type="number"],
+            textarea {
+                width: 98%;
+                padding: 10px;
+                padding-right: 0px;
+                font-size: 14px;
+                color: #333333;
+                border: 1px solid #cccccc;
+                border-radius: 4px;
+                background-color: #f8f8f8;
+                transition: border-color 0.3s ease;
+                margin-bottom: 20px;
+            }
+
+            input[type="number"]:focus,
+            textarea:focus {
+                outline: none;
+                border-color: #333;
+            }
+
             input[type="submit"] {
                 display: inline-block;
                 padding: 10px 30px;
@@ -97,6 +117,22 @@
                 color: white;
                 background-color: #333;
             }
+
+            .form-row {
+                display: flex;
+                align-items: center;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                font-style: italic;
+            }
+
+            .form-row span {
+                margin-right: 10px;
+            }
+
+            #minutes-text {
+                margin-left: 10px;
+            }
         </style>
     </head>
 
@@ -133,7 +169,22 @@
                 placeholder="Password (optional)"
             />
 
-            <div>
+            <div class="form-row">
+                <span style="display: inline-block">Expire after</span>
+                <span style="display: inline-block">
+                    <input
+                        type="number"
+                        id="expiry"
+                        name="expiry"
+                        placeholder="60"
+                        min="1"
+                        max="9999"
+                    />
+                </span>
+                <span id="minutes-text">minutes (maximum 2 days)</span>
+            </div>
+
+            <div style="display: inline-block">
                 <input type="submit" value="Create" />
             </div>
         </form>

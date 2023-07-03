@@ -3,5 +3,7 @@ CREATE TABLE user_pastes (
     uuid VARCHAR(16),
     title VARCHAR(255),
     contents TEXT,
-    passwd VARCHAR(20)
+    passwd VARCHAR(100),
+    created_at datetime not null default now(),
+    expire_at datetime not null default (now() + interval 1 day)
 );
