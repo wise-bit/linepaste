@@ -1,2 +1,8 @@
 sudo docker build -t linepaste .
 sudo docker run -p 80:80 linepaste
+
+sudo vim /etc/nginx/sites-available/default
+sudo nginx -t
+sudo ufw allow 80
+sudo service nginx restart
+
