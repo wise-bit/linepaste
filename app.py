@@ -35,7 +35,7 @@ def delete_expired_pastes():
 
 
 scheduler = BackgroundScheduler()
-scheduler.add_job(delete_expired_pastes, "interval", seconds=30)
+scheduler.add_job(delete_expired_pastes, "interval", seconds=10)
 scheduler.start()
 
 atexit.register(lambda: scheduler.shutdown())
