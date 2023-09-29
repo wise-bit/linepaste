@@ -6,3 +6,12 @@ sudo nginx -t
 sudo ufw allow 80
 sudo service nginx restart
 
+## Renewing SSL cert
+
+sudo systemctl status nginx
+sudo systemctl stop nginx
+sudo systemctl start nginx
+sudo certbot certonly --force-renew -d paste.satrajit.ca
+> Spin up a temporary webserver (standalone)
+sudo certbot renew --dry-run
+
