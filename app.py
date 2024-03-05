@@ -61,6 +61,11 @@ class Paste(db.Model):
     expire_at = db.Column(db.DateTime, default=datetime.today() + timedelta(minutes=60))
 
 
+class EspData(db.Model):
+    __tablename__ = "mock_sensor_1"
+    value1 = db.Column(db.String(100))
+    value2 = db.Column(db.String(100))
+
 @app.route("/")
 def home():
     # user_agent = request.headers.get("User-Agent")
@@ -105,6 +110,25 @@ def create_paste():
 
     else:
         return render_template("create_paste.html")
+
+
+@app.route("/esp-insert", methods=["GET", "POST"])
+def esp_insert():
+    if request.method == "POST":
+        value1 = request.args.get('value1')
+        value2 = request.args.get('value2')
+
+        values = EspData(
+            value1=value1,
+            value2=value2,
+        )
+        try:
+            db.session.add(values)
+            db.session.commit()
+            return jsonify({'message': 'values added successfully'}), 201
+        except:
+            db.session.rollback()
+            return jsonify({'error': 'Failed to add values', 'details': str(e)}), 500
 
 
 @app.route("/p/<paste_id>", methods=["GET", "POST"])
