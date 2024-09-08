@@ -1,6 +1,7 @@
 from waitress import serve
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql import text
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from dotenv import load_dotenv
@@ -18,7 +19,7 @@ load_dotenv()
 app = Flask(__name__)
 app.config[
     "SQLALCHEMY_DATABASE_URI"
-] = f"mysql://sat:{os.getenv('DB_PASSWORD')}@127.0.0.1:3306/pastes"
+] = f"mysql+pymysql://sat:{os.getenv('DB_PASSWORD')}@127.0.0.1:3306/pastes"
 db = SQLAlchemy(app)
 
 
@@ -63,6 +64,7 @@ class Paste(db.Model):
 
 class EspData(db.Model):
     __tablename__ = "mock_sensor_1"
+    id = db.Column(db.Integer, primary_key=True)
     value1 = db.Column(db.String(100))
     value2 = db.Column(db.String(100))
 
@@ -129,6 +131,33 @@ def esp_insert():
         except:
             db.session.rollback()
             return jsonify({'error': 'Failed to add values', 'details': str(e)}), 500
+
+
+@app.route("/esp-fetch", methods=["GET"])
+def esp_fetch():
+    query = text('SELECT value1, value2 FROM mock_sensor_1')
+
+    # result = db.engine.execute(query)
+    result = db.session.execute(query)
+
+    rows = result.fetchall()
+    # print(rows)
+    # entries = [{'value1': row['value1'], 'value2': row['value2']} for row in rows]
+
+    data = [(row[0], row[1]) for row in rows]
+
+    html = '<table border="1">'
+    html += '<tr>' + ''.join(f'<th>Column {i+1}</th>' for i in range(2)) + '</tr>'
+
+    # Add rows to the table
+    for row in data:
+        html += '<tr>' + ''.join(f'<td>{val}</td>' for val in row) + '</tr>'
+
+    html += '</table>'
+
+    return html, 200
+
+    # return jsonify(str(rows)), 200
 
 
 @app.route("/p/<paste_id>", methods=["GET", "POST"])
